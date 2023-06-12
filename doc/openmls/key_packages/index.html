@@ -1,0 +1,87 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Key Packages"><title>openmls::key_packages - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-ba5701c5741a7b69.css" id="mainThemeStyle"><div id="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="openmls" data-themes="" data-resource-suffix="" data-rustdoc-version="1.70.0 (90c541806 2023-05-31)" data-search-js="search-e077946657036a58.js" data-settings-js="settings-298e1ea74db45b39.js" data-settings-css="settings-7bfb4c59cc6bc502.css" data-theme-light-css="light-0f8c037637f9eb3e.css" data-theme-dark-css="dark-1097f8e92a01e3cf.css" data-theme-ayu-css="ayu-614652228113ac93.css" ></div><script src="../../static.files/storage-62ce34ea385b278a.js"></script><script defer src="../../static.files/main-f61008743c98d196.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../static.files/light-0f8c037637f9eb3e.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../static.files/dark-1097f8e92a01e3cf.css"><link rel="stylesheet" href="../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc mod"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="logo-container" href="../../openmls/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><h2></h2></nav><nav class="sidebar"><a class="logo-container" href="../../openmls/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><h2 class="location"><a href="#">Module key_packages</a></h2><div class="sidebar-elems"><section><ul class="block"><li><a href="#reexports">Re-exports</a></li><li><a href="#modules">Modules</a></li><li><a href="#structs">Structs</a></li></ul></section></div></nav><main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Module <a href="../index.html">openmls</a>::<wbr><a class="mod" href="#">key_packages</a><button id="copy-path" title="Copy item path to clipboard"><img src="../../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="srclink" href="../../src/openmls/key_packages/mod.rs.html#1-713">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><h2 id="key-packages"><a href="#key-packages">Key Packages</a></h2>
+<p>Key packages are pre-published public keys that provide some information
+about a user in order to facilitate the asynchronous addition of clients to
+a group.</p>
+<p>A key package object specifies:</p>
+<ul>
+<li>A <strong>protocol version</strong> and ciphersuite that the client supports</li>
+<li>A <strong>public key</strong> that others can use for key agreement</li>
+<li>A <strong>credential</strong> authenticating the client’s application-layer identity</li>
+<li>A list of <strong>extensions</strong> for the key package (see
+<a href="../extensions/index.html" title="mod openmls::extensions">Extensions</a> for details)</li>
+</ul>
+<p>Key packages are intended to be used only once and SHOULD NOT be reused
+except in case of last resort, i.e. if there’s no other key package
+available. Clients MAY generate and publish multiple KeyPackages to support
+multiple ciphersuites.</p>
+<p>The value for HPKE init key MUST be a public key for the asymmetric
+encryption scheme defined by ciphersuite, and it MUST be unique among the
+set of key packages created by this client. The whole structure is signed
+using the client’s signature key. A key package object with an invalid
+signature field is considered malformed.</p>
+<h3 id="creating-key-package-bundles"><a href="#creating-key-package-bundles">Creating key package bundles</a></h3>
+<p>Key package bundles are key packages including their private key. A key
+package bundle can be created as follows:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>openmls::prelude::<span class="kw-2">*</span>;
+<span class="kw">use </span>openmls_rust_crypto::OpenMlsRustCrypto;
+<span class="kw">use </span>openmls_basic_credential::SignatureKeyPair;
+
+<span class="kw">let </span>ciphersuite = Ciphersuite::MLS_128_DHKEMX25519_AES128GCM_SHA256_Ed25519;
+<span class="kw">let </span>backend = OpenMlsRustCrypto::default();
+
+<span class="kw">let </span>credential = Credential::new(<span class="string">&quot;identity&quot;</span>.into(), CredentialType::Basic).unwrap();
+<span class="kw">let </span>signer =
+    SignatureKeyPair::new(ciphersuite.signature_algorithm())
+        .expect(<span class="string">&quot;Error generating a signature key pair.&quot;</span>);
+<span class="kw">let </span>credential_with_key = CredentialWithKey {
+    credential,
+    signature_key: signer.public().into(),
+};
+<span class="kw">let </span>key_package = KeyPackage::builder()
+    .build(
+        CryptoConfig {
+            ciphersuite,
+            version: ProtocolVersion::default(),
+        },
+        <span class="kw-2">&amp;</span>backend,
+        <span class="kw-2">&amp;</span>signer,
+        credential_with_key,
+    )
+    .unwrap();</code></pre></div>
+<p>See <a href="struct.KeyPackage.html" title="struct openmls::key_packages::KeyPackage"><code>KeyPackage</code></a> for more details and other ways to create key packages.</p>
+<h3 id="loading-key-packages"><a href="#loading-key-packages">Loading key packages</a></h3>
+<p>When getting key packages from another user the serialized bytes are parsed
+as follows;</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>openmls::prelude::<span class="kw-2">*</span>;
+<span class="kw">use </span>openmls::test_utils::hex_to_bytes;
+<span class="kw">use </span>openmls_rust_crypto::OpenMlsRustCrypto;
+
+<span class="kw">let </span>backend = OpenMlsRustCrypto::default();
+<span class="kw">let </span>ciphersuite = Ciphersuite::MLS_128_DHKEMX25519_AES128GCM_SHA256_Ed25519;
+
+<span class="kw">let </span>key_package_bytes = hex_to_bytes(
+        <span class="string">&quot;00010003205D1DEB647BB5BDBB417022D1161076275ED861BD427B10DD07AC0233ED\
+        D1D54F20428F4A2DAE538BD64154892A1A2C85D0F6888CE9977E09AC53DCB3471DECD\
+        F6120DFC735AD28400BD79EFC8043B326D90A75A7B66F2A36EEDE79E3620A885E1825\
+        0001055361736861020001060001000200030200010C0001000200030004000500070\
+        200010100000000643170770000000064A03C87004040033B4FCBCC85D1AFE86241E8\
+        5CECB2B496C9D7F8CE98BEDDBDFFC02EB2CA54BC881A84CA800345005BB2622EDC377\
+        B54F223E160BFC872D5FEA2287E16A44703004040D33B9F1DA0F86C78855036B5FADD\
+        35983E14188A0798B455211654E594E3955026CD1AD275D284CA8FBEA5356A0BA4C6F\
+        799707C0046C05FBF52FF1FC1E9640A&quot;</span>);
+
+<span class="kw">let </span>key_package_in = KeyPackageIn::tls_deserialize(<span class="kw-2">&amp;mut </span>key_package_bytes.as_slice())
+    .expect(<span class="string">&quot;Could not deserialize KeyPackage&quot;</span>);
+
+<span class="kw">let </span>key_package = key_package_in
+    .validate(backend.crypto(), ProtocolVersion::Mls10)
+    .expect(<span class="string">&quot;Invalid KeyPackage&quot;</span>);</code></pre></div>
+<p>See <a href="struct.KeyPackage.html" title="struct openmls::key_packages::KeyPackage"><code>KeyPackage</code></a> for more details on how to use key packages.</p>
+</div></details><h2 id="reexports" class="small-section-header"><a href="#reexports">Re-exports</a></h2><ul class="item-table"><li><div class="item-name" id="reexport.KeyPackageIn"><code>pub use key_package_in::<a class="struct" href="key_package_in/struct.KeyPackageIn.html" title="struct openmls::key_packages::key_package_in::KeyPackageIn">KeyPackageIn</a>;</code></div></li></ul><h2 id="modules" class="small-section-header"><a href="#modules">Modules</a></h2><ul class="item-table"><li><div class="item-name"><a class="mod" href="errors/index.html" title="mod openmls::key_packages::errors">errors</a></div><div class="desc docblock-short">Key Package errors</div></li><li><div class="item-name"><a class="mod" href="key_package_in/index.html" title="mod openmls::key_packages::key_package_in">key_package_in</a></div><div class="desc docblock-short">Incoming KeyPackages. This modules contains deserialization and validation
+of KeyPackages.</div></li></ul><h2 id="structs" class="small-section-header"><a href="#structs">Structs</a></h2><ul class="item-table"><li><div class="item-name"><a class="struct" href="struct.KeyPackage.html" title="struct openmls::key_packages::KeyPackage">KeyPackage</a></div><div class="desc docblock-short">The key package struct.</div></li><li><div class="item-name"><a class="struct" href="struct.KeyPackageBuilder.html" title="struct openmls::key_packages::KeyPackageBuilder">KeyPackageBuilder</a></div><div class="desc docblock-short">Builder that helps creating (and configuring) a <a href="struct.KeyPackage.html" title="struct openmls::key_packages::KeyPackage"><code>KeyPackage</code></a>.</div></li><li><div class="item-name"><a class="struct" href="struct.Lifetime.html" title="struct openmls::key_packages::Lifetime">Lifetime</a></div><div class="desc docblock-short">The lifetime represents the times between which clients will
+consider a KeyPackage valid. This time is represented as an absolute time,
+measured in seconds since the Unix epoch (1970-01-01T00:00:00Z).
+A client MUST NOT use the data in a KeyPackage for any processing before
+the not_before date, or after the not_after date.</div></li></ul></section></div></main></body></html>
