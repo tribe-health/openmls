@@ -88,11 +88,33 @@
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
 
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
         <div id="page-wrapper" class="page-wrapper">
 
             <div class="page">
                                 <div id="menu-bar-hover-placeholder"></div>
-                <div id="menu-bar" class="menu-bar sticky bordered">
+                <div id="menu-bar" class="menu-bar sticky">
                     <div class="left-buttons">
                         <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
                             <i class="fa fa-bars"></i>
@@ -167,7 +189,6 @@ It is also sufficient to tag only the most high-level crate being published.</p>
 <li><a href="https://github.com/openmls/openmls/blob/main/traits/Cargo.toml">Traits</a></li>
 <li><a href="https://github.com/openmls/openmls/blob/main/memory_keystore/Cargo.toml">Memory Keystore</a></li>
 <li><a href="https://github.com/openmls/openmls/blob/main/openmls_rust_crypto/Cargo.toml">Rust Crypto Backend</a></li>
-<li><a href="https://github.com/openmls/openmls/blob/main/evercrypt_backend/Cargo.toml">Evercrypt Backend</a></li>
 <li><a href="https://github.com/openmls/openmls/blob/main/openmls/Cargo.toml">OpenMLS</a></li>
 </ul>
 <h2 id="release-note-and-changelog-template"><a class="header" href="#release-note-and-changelog-template">Release note and changelog template</a></h2>

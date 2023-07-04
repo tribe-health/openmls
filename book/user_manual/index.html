@@ -88,11 +88,33 @@
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
 
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
         <div id="page-wrapper" class="page-wrapper">
 
             <div class="page">
                                 <div id="menu-bar-hover-placeholder"></div>
-                <div id="menu-bar" class="menu-bar sticky bordered">
+                <div id="menu-bar" class="menu-bar sticky">
                     <div class="left-buttons">
                         <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
                             <i class="fa fa-bars"></i>
@@ -148,15 +170,11 @@
 <p>The user manual describes how to use the different parts of the OpenMLS API.</p>
 <h2 id="prerequisites"><a class="header" href="#prerequisites">Prerequisites</a></h2>
 <p>Most operations in OpenMLS require a <code>backend</code> object that provides all required cryptographic algorithms via the <a href="https://docs.rs/openmls/latest/openmls/prelude/trait.OpenMlsCryptoProvider.html"><code>OpenMlsCryptoProvider</code></a> trait.
-Currently, there are two implementations available through the <a href="https://crates.io/crates/openmls_rust_crypto">openmls_rust_crypto</a> and <a href="https://crates.io/crates/openmls_evercrypt">openmls_evercrypt</a> crates.</p>
+Currently, there are two implementations available through the <a href="https://crates.io/crates/openmls_rust_crypto">openmls_rust_crypto</a> crate.</p>
 <p>Thus, you can create the <code>backend</code> object for the following examples using ...</p>
 <pre><code class="language-rust no_run noplayground">    use openmls_rust_crypto::OpenMlsRustCrypto;
 
     let backend = OpenMlsRustCrypto::default();</code></pre>
-<p>... or ...</p>
-<pre><code class="language-rust no_run noplayground">    use openmls_evercrypt::OpenMlsEvercrypt;
-
-    let backend = OpenMlsEvercrypt::default();</code></pre>
 
                     </main>
 
